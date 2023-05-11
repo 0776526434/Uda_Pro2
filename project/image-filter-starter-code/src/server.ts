@@ -1,6 +1,7 @@
-import express from 'express';
+import express, { Router } from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import { send } from 'process';
 
 (async () => {
 
@@ -30,7 +31,16 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   /**************************************************************************** */
 
   //! END @TODO1
-  
+  app.get( "/filteredimage", async ( req: express.Request, res: express.Response) => {
+    try {
+      let { image_url: imageUrl } = req.query;
+      const callUrl = await filterImageFromURL(imageUrl);
+      res.sendFile(callUrl, {}, () => deleteLocalFiles([callUrl]));
+    } catch {
+      res.status(400).send("Upload image error");
+    }
+  } );
+
   // Root Endpoint
   // Displays a simple message to the user
   app.get( "/", async ( req, res ) => {
