@@ -33,8 +33,8 @@ import { send } from 'process';
   //! END @TODO1
   app.get( "/filteredimage", async ( req: express.Request, res: express.Response) => {
     try {
-      let { image_url: imageUrl } = req.query;
-      const callUrl = await filterImageFromURL(imageUrl);
+      let { image_url : imageUrl } = req.query;
+      const callUrl = await filterImageFromURL(imageUrl.toString());
       res.sendFile(callUrl, {}, () => deleteLocalFiles([callUrl]));
     } catch {
       res.status(400).send("Upload image error");
